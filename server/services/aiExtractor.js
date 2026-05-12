@@ -73,11 +73,20 @@ async function callClaude(systemPrompt, userPrompt) {
     system: systemPrompt,
     messages: [{ role: 'user', content: userPrompt }],
   })
-  return response.content[0].text
+  const block = response.content[0]
+  if (!block || block.type !== 'text') {
+    throw new Error(`Unexpected Claude response content: ${JSON.stringify(response.content)}`)
+  }
+  return block.text
 }
 
 function stripCodeFences(text) {
-  return text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim()
+  return text
+    .trim()
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```\s*$/i, '')
+    .trim()
 }
 
 export async function extractBom(rawText, rows, customer, uomMappings) {
