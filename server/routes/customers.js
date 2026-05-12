@@ -39,14 +39,20 @@ router.put('/:id', requireAdmin, async (req, res, next) => {
   try {
     const data = customerSchema.parse(req.body)
     res.json(await prisma.customer.update({ where: { id: req.params.id }, data }))
-  } catch (err) { next(err) }
+  } catch (err) {
+    if (err.code === 'P2025') return res.status(404).json({ error: 'Customer not found' })
+    next(err)
+  }
 })
 
 router.delete('/:id', requireAdmin, async (req, res, next) => {
   try {
     await prisma.customer.delete({ where: { id: req.params.id } })
     res.json({ success: true })
-  } catch (err) { next(err) }
+  } catch (err) {
+    if (err.code === 'P2025') return res.status(404).json({ error: 'Customer not found' })
+    next(err)
+  }
 })
 
 export default router

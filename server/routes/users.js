@@ -8,7 +8,14 @@ import { requireAdmin } from '../middleware/adminOnly.js'
 const router = Router()
 router.use(requireAuth, requireAdmin)
 
-const userSchema = z.object({
+const createUserSchema = z.object({
+  username: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(8),
+  role: z.enum(['ADMIN', 'USER']),
+})
+
+const updateUserSchema = z.object({
   username: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(8).optional(),
@@ -25,8 +32,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { username, email, password, role } = userSchema.parse(req.body)
-    if (!password) return res.status(400).json({ error: 'Password is required for new users' })
+    const { username, email, password, role } = createUserSchema.parse(req.body)
     const passwordHash = await bcrypt.hash(password, 12)
     const user = await prisma.user.create({ data: { username, email, passwordHash, role }, select })
     res.status(201).json(user)
@@ -35,12 +41,15 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
-    const { username, email, password, role } = userSchema.parse(req.body)
+    const { username, email, password, role } = updateUserSchema.parse(req.body)
     const data = { username, email, role }
     if (password) data.passwordHash = await bcrypt.hash(password, 12)
     const user = await prisma.user.update({ where: { id: req.params.id }, data, select })
     res.json(user)
-  } catch (err) { next(err) }
+  } catch (err) {
+    if (err.code === 'P2025') return res.status(404).json({ error: 'User not found' })
+    next(err)
+  }
 })
 
 router.delete('/:id', async (req, res, next) => {
@@ -48,7 +57,10 @@ router.delete('/:id', async (req, res, next) => {
     if (req.params.id === req.user.id) return res.status(400).json({ error: 'Cannot delete your own account' })
     await prisma.user.delete({ where: { id: req.params.id } })
     res.json({ success: true })
-  } catch (err) { next(err) }
+  } catch (err) {
+    if (err.code === 'P2025') return res.status(404).json({ error: 'User not found' })
+    next(err)
+  }
 })
 
 export default router

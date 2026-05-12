@@ -31,8 +31,8 @@ router.get('/stats', async (req, res, next) => {
     ])
 
     res.json({
-      totalBomsConverted: totalLogs._count.id,
-      bomsThisMonth: thisMonthLogs._count.id,
+      totalBomsConverted: totalLogs._sum.bomsConverted ?? 0,
+      bomsThisMonth: thisMonthLogs._sum.bomsConverted ?? 0,
       totalProductsConverted: totalLogs._sum.productsConverted ?? 0,
       productsThisMonth: thisMonthLogs._sum.productsConverted ?? 0,
       recentActivity: recentLogs,

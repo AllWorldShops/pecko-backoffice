@@ -36,14 +36,20 @@ router.put('/:id', async (req, res, next) => {
       where: { id: req.params.id },
       data: { customerId, customerUOM, peckoUOM, conversionFactor },
     }))
-  } catch (err) { next(err) }
+  } catch (err) {
+    if (err.code === 'P2025') return res.status(404).json({ error: 'Mapping not found' })
+    next(err)
+  }
 })
 
 router.delete('/:id', async (req, res, next) => {
   try {
     await prisma.unitOfMeasureMapping.delete({ where: { id: req.params.id } })
     res.json({ success: true })
-  } catch (err) { next(err) }
+  } catch (err) {
+    if (err.code === 'P2025') return res.status(404).json({ error: 'Mapping not found' })
+    next(err)
+  }
 })
 
 export default router
