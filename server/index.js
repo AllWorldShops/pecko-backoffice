@@ -3,12 +3,18 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import multer from 'multer'
 import { ZodError } from 'zod'
+import { fileURLToPath } from 'url'
+import path from 'path'
 import { logger } from './lib/logger.js'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 import authRouter from './routes/auth.js'
 import setupRouter from './routes/setup.js'
 import usersRouter from './routes/users.js'
 import customersRouter from './routes/customers.js'
 import uomRouter from './routes/uomMappings.js'
+import manufacturerRouter from './routes/manufacturerMappings.js'
 import dashboardRouter from './routes/dashboard.js'
 import convertRouter from './routes/convert.js'
 import downloadRouter from './routes/download.js'
@@ -29,11 +35,22 @@ app.use('/api/auth', authRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/customers', customersRouter)
 app.use('/api/uom-mappings', uomRouter)
+app.use('/api/manufacturer-mappings', manufacturerRouter)
 app.use('/api/dashboard', dashboardRouter)
 app.use('/api/convert', convertRouter)
 app.use('/api/download', downloadRouter)
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
+
+// In production, serve the built React app for all non-API routes
+if (process.env.NODE_ENV === 'production') {
+  const clientDist = path.join(__dirname, '../client/dist')
+  app.use(express.static(clientDist))
+  // Regex excludes /api/* so Express still returns 404 for unknown API routes
+  app.get(/^(?!\/api\/).*/, (req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'))
+  })
+}
 
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError || err.message?.startsWith('Unsupported file type')) {

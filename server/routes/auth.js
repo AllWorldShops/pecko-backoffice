@@ -14,8 +14,10 @@ function signTokens(user) {
   return { accessToken, refreshToken }
 }
 
-const isProduction = process.env.NODE_ENV === 'production'
-const cookieBase = { httpOnly: true, sameSite: 'lax', secure: isProduction }
+// Use HTTPS=true in .env when your server is behind SSL/TLS.
+// Defaults to false so plain-HTTP internal deployments work correctly.
+const secureCookies = process.env.HTTPS === 'true'
+const cookieBase = { httpOnly: true, sameSite: 'lax', secure: secureCookies }
 
 function setCookies(res, accessToken, refreshToken) {
   res.cookie('accessToken', accessToken, { ...cookieBase, maxAge: 15 * 60 * 1000 })

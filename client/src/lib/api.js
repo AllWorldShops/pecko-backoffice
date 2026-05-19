@@ -17,6 +17,15 @@ api.interceptors.response.use(
   res => res,
   async err => {
     const original = err.config
+
+    // Never intercept auth routes — /auth/me and /auth/refresh are expected to
+    // return 401 for unauthenticated users. Intercepting them causes a deadlock:
+    // the refresh call itself gets a 401, which queues behind processQueue, which
+    // is waiting for the refresh call to finish → hangs forever.
+    if (original.url?.includes('/auth/')) {
+      return Promise.reject(err)
+    }
+
     if (err.response?.status === 401 && !original._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => failedQueue.push({ resolve, reject }))

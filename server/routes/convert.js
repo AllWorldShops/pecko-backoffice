@@ -28,9 +28,10 @@ router.post('/', upload.single('file'), async (req, res, next) => {
 
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
 
-    const [customer, uomMappings] = await Promise.all([
+    const [customer, uomMappings, manufacturerMappings] = await Promise.all([
       prisma.customer.findUnique({ where: { id: customerId } }),
       prisma.unitOfMeasureMapping.findMany({ where: { customerId } }),
+      prisma.manufacturerMapping.findMany(),
     ])
 
     if (!customer) return res.status(404).json({ error: 'Customer not found' })
@@ -46,8 +47,22 @@ router.post('/', upload.single('file'), async (req, res, next) => {
       throw new Error('AI could not extract valid BOM data from the file')
     }
 
-    const productBuffer = generateProductImport(parent, children)
-    const bomBuffer = generateBomImport(parent, children)
+    // Build a case-insensitive lookup map: uppercase(customerManufacturer) → peckoManufacturer
+    const mfgLookup = new Map(
+      manufacturerMappings.map(m => [m.customerManufacturer.toUpperCase(), m.peckoManufacturer])
+    )
+
+    function applyMfgMapping(item) {
+      if (!item.manufacturer) return item
+      const mapped = mfgLookup.get(item.manufacturer.toUpperCase())
+      return mapped ? { ...item, manufacturer: mapped } : item
+    }
+
+    const mappedParent = applyMfgMapping(parent)
+    const mappedChildren = children.map(applyMfgMapping)
+
+    const productBuffer = generateProductImport(mappedParent, mappedChildren)
+    const bomBuffer = generateBomImport(mappedParent, mappedChildren)
 
     const jobId = uuid()
     const outputDir = path.join(process.env.UPLOAD_DIR || './uploads', 'output', jobId)
@@ -62,7 +77,7 @@ router.post('/', upload.single('file'), async (req, res, next) => {
         originalFilename,
         status: 'SUCCESS',
         productsConverted: children.length + 1,
-        bomsConverted: children.length,
+        bomsConverted: 1,
       },
     })
 
@@ -70,7 +85,7 @@ router.post('/', upload.single('file'), async (req, res, next) => {
       success: true,
       jobId,
       productsConverted: children.length + 1,
-      bomsConverted: children.length,
+      bomsConverted: 1,
       downloadUrls: {
         productImport: `/api/download/${jobId}/product-import.xlsx`,
         bomImport: `/api/download/${jobId}/bom-import.xlsx`,

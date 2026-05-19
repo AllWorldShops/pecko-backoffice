@@ -8,6 +8,7 @@ const PAGE_TITLES = {
   '/settings/users': 'Users',
   '/settings/customers': 'Customers',
   '/settings/unit-of-measure': 'Unit of Measure',
+  '/settings/manufacturer-mappings': 'Manufacturer Mappings',
   '/settings/advanced': 'Advanced Settings',
 }
 

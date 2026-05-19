@@ -41,11 +41,12 @@ export function generateProductImport(parent, children) {
 
 export function generateBomImport(parent, children) {
   const headers = [
+    'ID',
     'Product',
-    'Product/MPN/Customer/Supplier Part No',
-    'Product/MPN/Customer/Supplier Part No',
+    'Quantity',
+    'BOM Type',
     'BOM Lines/Position',
-    'BoM Lines/Display Name',
+    'BoM Lines/Component',
     'BoM Lines/Part Number',
     'BoM Lines/Description',
     'BoM Lines/Manufacturer',
@@ -55,22 +56,27 @@ export function generateBomImport(parent, children) {
 
   const data = [headers]
 
+  // Parent-level columns — only filled on the first child row; blank for subsequent rows
+  const parentCols = [
+    `__export__.mrp_bom_${parent.itemId}`,   // ID
+    parent.itemId,                            // Product
+    1,                                        // Quantity
+    'Manufacture this product',               // BOM Type
+  ]
+  const blankParentCols = ['', '', '', '']
+
   children.forEach((child, idx) => {
     const childCols = [
-      child.findNo,
-      child.itemId,
-      child.manufacturerPartNo || '',
-      child.itemName,
-      child.manufacturer || '',
-      child.uom,
-      child.quantity,
+      child.findNo || '',                     // BOM Lines/Position
+      child.itemId || '',                     // BoM Lines/Component
+      child.manufacturerPartNo || '',         // BoM Lines/Part Number
+      child.itemName || '',                   // BoM Lines/Description
+      child.manufacturer || '',               // BoM Lines/Manufacturer
+      child.uom || '',                        // BoM Lines/Product Unit of Measure
+      child.quantity || '',                   // BoM Lines/Quantity
     ]
 
-    if (idx === 0) {
-      data.push([parent.itemId, parent.itemId, '1', ...childCols])
-    } else {
-      data.push(['', '', '', ...childCols])
-    }
+    data.push([...(idx === 0 ? parentCols : blankParentCols), ...childCols])
   })
 
   const ws = xlsx.utils.aoa_to_sheet(data)

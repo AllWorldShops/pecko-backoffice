@@ -3,26 +3,21 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  USER
-}
-
-enum ConversionStatus {
-  SUCCESS
-  FAILED
-}
+// SQLite does not support native enums.
+// Role values: "ADMIN" | "USER"
+// ConversionStatus values: "SUCCESS" | "FAILED"
+// Enforced by Zod at the API layer.
 
 model User {
   id           String   @id @default(cuid())
   username     String
   email        String   @unique
   passwordHash String
-  role         Role     @default(USER)
+  role         String   @default("USER")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -32,7 +27,7 @@ model User {
 model Customer {
   id          String   @id @default(cuid())
   name        String   @unique
-  description String   @db.Text
+  description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -54,15 +49,23 @@ model UnitOfMeasureMapping {
   @@unique([customerId, customerUOM])
 }
 
+model ManufacturerMapping {
+  id                   String   @id @default(cuid())
+  customerManufacturer String   @unique
+  peckoManufacturer    String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
 model ConversionLog {
-  id                String           @id @default(cuid())
+  id                String   @id @default(cuid())
   userId            String?
   customerId        String?
   originalFilename  String
-  status            ConversionStatus
-  productsConverted Int              @default(0)
-  bomsConverted     Int              @default(0)
-  createdAt         DateTime         @default(now())
+  status            String
+  productsConverted Int      @default(0)
+  bomsConverted     Int      @default(0)
+  createdAt         DateTime @default(now())
 
   user     User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
   customer Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)

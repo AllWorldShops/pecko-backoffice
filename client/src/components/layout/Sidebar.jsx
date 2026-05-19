@@ -1,5 +1,5 @@
 import { NavLink, useNavigate, useLocation } from 'react-router-dom'
-import { LayoutDashboard, RefreshCw, Settings, Users, Building2, Ruler, SlidersHorizontal, LogOut, ChevronDown } from 'lucide-react'
+import { LayoutDashboard, RefreshCw, Settings, Users, Building2, Ruler, Factory, SlidersHorizontal, LogOut, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
@@ -65,6 +65,7 @@ export default function Sidebar() {
                   { to: '/settings/users', icon: Users, label: 'Users' },
                   { to: '/settings/customers', icon: Building2, label: 'Customers' },
                   { to: '/settings/unit-of-measure', icon: Ruler, label: 'Unit of Measure' },
+                  { to: '/settings/manufacturer-mappings', icon: Factory, label: 'Manufacturers' },
                   { to: '/settings/advanced', icon: SlidersHorizontal, label: 'Advanced' },
                 ].map(({ to, icon: Icon, label }) => (
                   <NavLink

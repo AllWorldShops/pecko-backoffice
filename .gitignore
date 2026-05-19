@@ -1,6 +1,21 @@
 node_modules/
 .env
-uploads/output/
 dist/
 .DS_Store
 *.log
+
+# Database — never commit the live DB file
+prisma/pecko.db
+prisma/pecko.db-shm
+prisma/pecko.db-wal
+*.db
+
+# Uploaded BOM files and AI-generated output
+uploads/
+server/uploads/
+
+# Vite dependency pre-bundle cache
+client/node_modules/.vite/
+
+# Claude Code local settings
+.claude/settings.local.json

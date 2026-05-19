@@ -7,7 +7,8 @@ const RETURN_SCHEMA = `{
     "itemId": "",
     "itemName": "",
     "uom": "",
-    "quantity": 1
+    "quantity": 1,
+    "manufacturerPartNo": ""
   },
   "children": [
     {
