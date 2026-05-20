@@ -1,8 +1,8 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install --omit=dev && npm run setup"
+buildCommand = "npm install --omit=dev"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "npm run setup && npm start"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
