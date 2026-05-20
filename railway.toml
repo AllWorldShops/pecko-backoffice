@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install --include=dev && npm install --no-save @rollup/rollup-linux-x64-gnu && npm run build && npm run setup"
+buildCommand = "npm install --include=dev && npm run build && npm run setup"
 
 [deploy]
 startCommand = "npm start"
