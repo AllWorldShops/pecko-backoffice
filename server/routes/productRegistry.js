@@ -10,29 +10,25 @@ const router = Router()
 router.use(requireAuth, requireAdmin)
 
 const registrySchema = z.object({
-  itemId: z.string().min(1, 'Item ID is required'),
-  itemName: z.string().optional(),
-  uom: z.string().optional(),
+  itemName: z.string().min(1, 'Item Name is required'),
+  externalId: z.string().min(1, 'External ID is required'),
 })
 
-// GET /api/product-registry — paginated search
+// GET /api/product-registry — paginated search by itemName
 router.get('/', async (req, res, next) => {
   try {
     const search = req.query.search?.trim() || ''
-    const page = Math.max(1, parseInt(req.query.page) || 1)
-    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 50))
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1)
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit, 10) || 50))
     const skip = (page - 1) * limit
 
     const where = search
-      ? { OR: [
-          { itemId: { contains: search } },
-          { itemName: { contains: search } },
-        ]}
+      ? { itemName: { contains: search } }
       : {}
 
     const [total, items] = await Promise.all([
       prisma.productRegistry.count({ where }),
-      prisma.productRegistry.findMany({ where, skip, take: limit, orderBy: { itemId: 'asc' } }),
+      prisma.productRegistry.findMany({ where, skip, take: limit, orderBy: { itemName: 'asc' } }),
     ])
 
     res.json({ items, total, page, limit, totalPages: Math.ceil(total / limit) })
@@ -43,10 +39,10 @@ router.get('/', async (req, res, next) => {
 router.get('/template', (req, res) => {
   const wb = xlsx.utils.book_new()
   const ws = xlsx.utils.aoa_to_sheet([
-    ['Item ID', 'Item Name', 'UOM'],
-    ['PART-001', 'Widget Assembly', 'EA'],
+    ['External ID', 'Item Name'],
+    ['__export__.product_template_12345', 'Widget Assembly'],
   ])
-  ws['!cols'] = [{ wch: 25 }, { wch: 40 }, { wch: 10 }]
+  ws['!cols'] = [{ wch: 40 }, { wch: 50 }]
   xlsx.utils.book_append_sheet(wb, ws, 'Product Registry')
   const buffer = xlsx.write(wb, { type: 'buffer', bookType: 'xlsx' })
   res.set({
@@ -56,7 +52,8 @@ router.get('/template', (req, res) => {
   res.send(buffer)
 })
 
-// POST /api/product-registry/import — bulk upsert from CSV or Excel
+// POST /api/product-registry/import — bulk upsert from Excel/CSV
+// Col A = externalId, Col B = itemName
 router.post('/import', importUpload.single('file'), async (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
@@ -67,24 +64,24 @@ router.post('/import', importUpload.single('file'), async (req, res, next) => {
     }
     const sheet = wb.Sheets[wb.SheetNames[0]]
     const rows = xlsx.utils.sheet_to_json(sheet, { header: 1, defval: '' })
-    const dataRows = rows.slice(1)  // skip header
+    const dataRows = rows.slice(1) // skip header
 
     if (dataRows.length === 0) {
-      return res.status(400).json({ error: 'No valid data rows found. Ensure Column A = Item ID, Column B = Item Name, Column C = UOM.' })
+      return res.status(400).json({ error: 'No valid data rows found. Ensure Column A = External ID, Column B = Item Name.' })
     }
 
     let imported = 0
     let skipped = 0
 
     for (const row of dataRows) {
-      const itemId = String(row[0] ?? '').trim()
-      if (!itemId) { skipped++; continue }
-      const itemName = String(row[1] ?? '').trim() || null
-      const uom = String(row[2] ?? '').trim() || null
+      const externalId = String(row[0] ?? '').trim()
+      const itemName = String(row[1] ?? '').trim()
+      if (!externalId || !itemName) { skipped++; continue }
+
       await prisma.productRegistry.upsert({
-        where: { itemId },
-        update: { itemName, uom },
-        create: { itemId, itemName, uom },
+        where: { itemName },
+        update: { externalId },
+        create: { itemName, externalId },
       })
       imported++
     }
@@ -99,7 +96,7 @@ router.post('/', async (req, res, next) => {
     const data = registrySchema.parse(req.body)
     res.status(201).json(await prisma.productRegistry.create({ data }))
   } catch (err) {
-    if (err.code === 'P2002') return res.status(409).json({ error: 'An entry for this Item ID already exists' })
+    if (err.code === 'P2002') return res.status(409).json({ error: 'An entry for this Item Name already exists' })
     next(err)
   }
 })
