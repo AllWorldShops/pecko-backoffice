@@ -62,26 +62,34 @@ router.post('/import', importUpload.single('file'), async (req, res, next) => {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
 
     const wb = xlsx.read(req.file.buffer, { type: 'buffer' })
+    if (!wb.SheetNames.length || !wb.Sheets[wb.SheetNames[0]]) {
+      return res.status(400).json({ error: 'Could not read the uploaded file. Ensure it is a valid Excel or CSV file.' })
+    }
     const sheet = wb.Sheets[wb.SheetNames[0]]
     const rows = xlsx.utils.sheet_to_json(sheet, { header: 1, defval: '' })
+    const dataRows = rows.slice(1)  // skip header
+
+    if (dataRows.length === 0) {
+      return res.status(400).json({ error: 'No valid data rows found. Ensure Column A = Item ID, Column B = Item Name, Column C = UOM.' })
+    }
 
     let imported = 0
     let skipped = 0
 
-    for (const row of rows.slice(1)) {
-      const itemId = String(row[0] ?? '').trim()
-      if (!itemId) { skipped++; continue }
-
-      const itemName = String(row[1] ?? '').trim() || null
-      const uom = String(row[2] ?? '').trim() || null
-
-      await prisma.productRegistry.upsert({
-        where: { itemId },
-        update: { itemName, uom },
-        create: { itemId, itemName, uom },
-      })
-      imported++
-    }
+    await prisma.$transaction(async (tx) => {
+      for (const row of dataRows) {
+        const itemId = String(row[0] ?? '').trim()
+        if (!itemId) { skipped++; continue }
+        const itemName = String(row[1] ?? '').trim() || null
+        const uom = String(row[2] ?? '').trim() || null
+        await tx.productRegistry.upsert({
+          where: { itemId },
+          update: { itemName, uom },
+          create: { itemId, itemName, uom },
+        })
+        imported++
+      }
+    })
 
     res.json({ imported, skipped })
   } catch (err) { next(err) }
