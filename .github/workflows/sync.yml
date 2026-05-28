@@ -1,0 +1,34 @@
+name: Suresh to All World Shops Auto-deploy
+
+on:
+  push:
+    branches:
+      - main  # If your main branch is called 'master', change 'main' to 'master'
+
+jobs:
+  sync-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Configure SSH Private Key
+        run: |
+          mkdir -p ~/.ssh
+          # We use your filename "ssh" here
+          echo "${{ secrets.DESTINATION_SSH_KEY }}" > ~/.ssh/ssh
+          chmod 600 ~/.ssh/ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          
+          # This tells git to explicitly use your "ssh" file for authentication
+          echo "Host github.com" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/ssh" >> ~/.ssh/config
+
+      - name: Push Changes to Account B
+        run: |
+          git remote add target git@github.com:AllWorldShops/bom-converter.git
+          
+          git push target refs/heads/*:refs/heads/* --force
+          git push target refs/tags/*:refs/tags/* --force
