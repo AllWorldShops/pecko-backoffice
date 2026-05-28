@@ -14,17 +14,11 @@ jobs:
         with:
           fetch-depth: 0 
 
-      - name: Configure SSH Private Key
-        run: |
-          mkdir -p ~/.ssh
-          # We use your filename "ssh" here
-          echo "${{ secrets.DESTINATION_SSH_KEY }}" > ~/.ssh/ssh
-          chmod 600 ~/.ssh/ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          
-          # This tells git to explicitly use your "ssh" file for authentication
-          echo "Host github.com" >> ~/.ssh/config
-          echo "  IdentityFile ~/.ssh/ssh" >> ~/.ssh/config
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.DESTINATION_SSH_KEY }}
+          known_hosts: ${{ secrets.DESTINATION_SSH_KEY }} # This auto-scans github.com for you
 
       - name: Push Changes to Account B
         run: |
