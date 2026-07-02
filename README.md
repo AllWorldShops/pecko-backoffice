@@ -53,8 +53,8 @@ Customers send BOMs in their own formats. This tool uses Claude AI to read any B
 ### 1 — Clone and install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/pecko-bom-converter.git
-cd pecko-bom-converter
+git clone https://github.com/YOUR_USERNAME/pecko-backoffice.git
+cd pecko-backoffice
 npm install
 ```
 
@@ -222,7 +222,7 @@ Add all environment variables in the Vercel dashboard under **Settings → Envir
 # 1. Create a new repo on github.com (don't add any files)
 
 # 2. In this project folder:
-git remote add origin https://github.com/YOUR_USERNAME/pecko-bom-converter.git
+git remote add origin https://github.com/YOUR_USERNAME/pecko-backoffice.git
 git branch -M main
 git push -u origin main
 ```
@@ -249,7 +249,7 @@ git push -u origin main
 ## Project structure
 
 ```
-pecko-bom-converter/
+pecko-backoffice/
 ├── client/                        React + Vite frontend
 │   └── src/
 │       ├── pages/

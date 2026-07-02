@@ -9,7 +9,7 @@ jobs:
   sync-repo:
     runs-on: ubuntu-latest
     # 👇 Add this line so it ONLY runs in Account A and ignores Account B
-    if: github.repository == 'suresh6634/bom-converter' 
+    if: github.repository == 'suresh6634/pecko-backoffice'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
