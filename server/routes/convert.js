@@ -46,11 +46,14 @@ router.post('/', upload.single('file'), async (req, res, next) => {
     // UOM mapping (per-customer): replace the customer's unit with the Pecko unit and
     // scale quantity by the conversion factor. Case-insensitive.
     const uomLookup = new Map(uomMappings.map(m => [m.customerUOM.toUpperCase(), m]))
+    // Round converted quantities to at most 4 decimal places (e.g. 2100 mm * 0.001 = 2.1,
+    // 3 * 0.0254 = 0.0762). Trailing zeros are dropped since the result is a plain number.
+    const round4 = n => Math.round((n + Number.EPSILON) * 1e4) / 1e4
     function applyUomMapping(item) {
       if (!item.uom) return item
       const m = uomLookup.get(item.uom.toUpperCase())
       if (!m) return item
-      const quantity = typeof item.quantity === 'number' ? item.quantity * m.conversionFactor : item.quantity
+      const quantity = typeof item.quantity === 'number' ? round4(item.quantity * m.conversionFactor) : item.quantity
       return { ...item, uom: m.peckoUOM, quantity }
     }
 
