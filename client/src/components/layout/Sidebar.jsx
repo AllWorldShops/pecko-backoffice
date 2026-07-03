@@ -9,10 +9,12 @@ const navItemBase = 'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-m
 const activeClass = 'bg-electric-500/20 text-electric-300'
 const inactiveClass = 'text-slate-400 hover:bg-navy-700 hover:text-slate-100'
 
-function filterTree(nodes, isAdmin) {
+// Drop admin-only nodes for non-admins, and company nodes for users of another
+// company. Admins see everything.
+function filterTree(nodes, ctx) {
   return nodes
-    .filter(node => !node.adminOnly || isAdmin)
-    .map(node => (node.children ? { ...node, children: filterTree(node.children, isAdmin) } : node))
+    .filter(node => (!node.adminOnly || ctx.isAdmin) && (!node.company || ctx.isAdmin || node.company === ctx.company))
+    .map(node => (node.children ? { ...node, children: filterTree(node.children, ctx) } : node))
 }
 
 function collectPaths(node, acc = []) {
@@ -92,7 +94,7 @@ export default function Sidebar() {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const isAdmin = user?.role === 'ADMIN'
-  const tree = filterTree(NAV_TREE, isAdmin)
+  const tree = filterTree(NAV_TREE, { isAdmin, company: user?.company })
 
   const [expanded, setExpanded] = useState(() => {
     const open = new Set()

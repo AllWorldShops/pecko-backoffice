@@ -3,6 +3,7 @@ import express from 'express'
 import prisma from '../lib/prisma.js'
 import { requireAuth } from '../middleware/auth.js'
 import { requireAdmin } from '../middleware/adminOnly.js'
+import { requireCompany } from '../middleware/companyOnly.js'
 import { importUpload } from '../middleware/upload.js'
 import { saveRfqSnapshot } from '../services/rfqStore.js'
 import { syncRfqFromGraph, isGraphConfigured } from '../services/rfqGraphSync.js'
@@ -61,7 +62,7 @@ router.post('/sync/graph', requireAuth, requireAdmin, async (req, res, next) => 
 // Status ordering for display: action-required first.
 const STATUS_RANK = { PENDING_REVIEW: 0, OTHER: 1, NONE: 2, COMPLETED: 3 }
 
-router.get('/projects', requireAuth, async (req, res, next) => {
+router.get('/projects', requireAuth, requireCompany('PM'), async (req, res, next) => {
   try {
     const { status, customer, q } = req.query
     const where = {}
@@ -91,7 +92,7 @@ router.get('/projects', requireAuth, async (req, res, next) => {
   } catch (err) { next(err) }
 })
 
-router.get('/stats', requireAuth, async (req, res, next) => {
+router.get('/stats', requireAuth, requireCompany('PM'), async (req, res, next) => {
   try {
     const [lastSync, all] = await Promise.all([
       prisma.rfqSync.findFirst({ orderBy: { syncedAt: 'desc' } }),

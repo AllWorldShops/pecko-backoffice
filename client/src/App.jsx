@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import ProtectedRoute from '@/components/layout/ProtectedRoute'
 import AdminRoute from '@/components/layout/AdminRoute'
+import CompanyRoute from '@/components/layout/CompanyRoute'
 import AppShell from '@/components/layout/AppShell'
 import Login from '@/pages/Login'
 import SetupAdmin from '@/pages/SetupAdmin'
@@ -49,7 +50,9 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/convert" element={<Convert />} />
-          <Route path="/pm/rfq-dashboard" element={<RfqDashboard />} />
+          <Route element={<CompanyRoute company="PM" />}>
+            <Route path="/pm/rfq-dashboard" element={<RfqDashboard />} />
+          </Route>
           <Route path="/source-raw-materials/dashboard" element={<SourceRawMaterialsDashboard />} />
           <Route path="/source-raw-materials/search" element={<SourceRawMaterialsSearch />} />
           <Route path="/settings/customers" element={<Customers />} />

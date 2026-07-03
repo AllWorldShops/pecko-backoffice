@@ -17,13 +17,15 @@ import {
 // Sidebar is a tree: top-level menus > optional sub-groups > leaf items (`to`).
 // A node with no `to` and no `children` renders as an inert "coming soon" row.
 // `adminOnly` groups are stripped entirely for non-admin users.
+// `company` groups are shown only to users of that company (admins see all).
 export const NAV_TREE = [
-  { label: 'PEI' },
+  { label: 'PEI', company: 'PEI' },
   {
     label: 'PM',
+    company: 'PM',
     children: [{ label: 'RFQ Dashboard', to: '/pm/rfq-dashboard', icon: FileText }],
   },
-  { label: 'PKS' },
+  { label: 'PKS', company: 'PKS' },
   {
     label: 'Common',
     children: [
