@@ -12,12 +12,12 @@ export const translations = {
     nav: {
       common: 'Common', settings: 'Settings', admin: 'Admin', bomConverter: 'BOM Converter',
       dashboard: 'Dashboard', convert: 'BOM Converter', sourceRawMaterials: 'Source Raw Materials',
-      searchLeaf: 'Search', rfqDashboard: 'RFQ Dashboard', customers: 'Customers',
+      searchLeaf: 'Search', rfqDashboard: 'RFQ Dashboard', moStatus: 'MO Status', customers: 'Customers',
       unitOfMeasure: 'Unit of Measure', manufacturers: 'Manufacturers', productRegistry: 'Product Registry',
       users: 'Users', advanced: 'Advanced',
     },
     pageTitles: {
-      '/dashboard': 'Dashboard', '/convert': 'Convert BOM', '/pm/rfq-dashboard': 'RFQ Dashboard',
+      '/dashboard': 'Dashboard', '/convert': 'Convert BOM', '/pm/rfq-dashboard': 'RFQ Dashboard', '/pm/mo-status': 'MO Status',
       '/source-raw-materials/dashboard': 'Source Raw Materials Dashboard',
       '/source-raw-materials/search': 'Search Raw Materials', '/settings/users': 'Users',
       '/settings/customers': 'Customers', '/settings/unit-of-measure': 'Unit of Measure',
@@ -69,6 +69,13 @@ export const translations = {
       colDistributor: 'Distributor', colMoq: 'MOQ', colPkg: 'Pkg', colAvailability: 'Availability',
       colRohs: 'RoHS', colOrderPricing: 'Order pricing', colTotal: 'Total @ {n}', colBuy: 'Buy',
       inStock: '{n} in stock', outOfStock: 'Out of stock', minNotMet: 'min. not met', buy: 'Buy', no: 'No',
+    },
+    mo: {
+      intro: 'Import an Odoo Manufacturing Order export. Each MO is reduced to one row showing its current status — the highest-priority Work Order status (In Progress → Ready → Waiting for components → Waiting for another WO → Finished).',
+      import: 'Import Excel', importing: 'Processing…', importAnother: 'Import another file',
+      download: 'Download cleaned Excel', summary: '{lines} work-order lines → {mos} manufacturing orders',
+      unknown: 'Unrecognised status values (ranked lowest): {list}', noStatus: 'No status',
+      failed: 'Could not process this file.', empty: 'No file imported yet.',
     },
     related: {
       tabSimilar: 'Similar', tabAlternatives: 'Alternatives',
@@ -129,12 +136,12 @@ export const translations = {
     nav: {
       common: '通用', settings: '设置', admin: '管理员', bomConverter: 'BOM 转换器',
       dashboard: '仪表盘', convert: 'BOM 转换器', sourceRawMaterials: '原材料采购',
-      searchLeaf: '搜索', rfqDashboard: 'RFQ 仪表盘', customers: '客户',
+      searchLeaf: '搜索', rfqDashboard: 'RFQ 仪表盘', moStatus: '制造单状态', customers: '客户',
       unitOfMeasure: '计量单位', manufacturers: '制造商', productRegistry: '产品登记',
       users: '用户', advanced: '高级',
     },
     pageTitles: {
-      '/dashboard': '仪表盘', '/convert': 'BOM 转换', '/pm/rfq-dashboard': 'RFQ 仪表盘',
+      '/dashboard': '仪表盘', '/convert': 'BOM 转换', '/pm/rfq-dashboard': 'RFQ 仪表盘', '/pm/mo-status': '制造单状态',
       '/source-raw-materials/dashboard': '原材料采购仪表盘',
       '/source-raw-materials/search': '原材料搜索', '/settings/users': '用户',
       '/settings/customers': '客户', '/settings/unit-of-measure': '计量单位',
@@ -186,6 +193,13 @@ export const translations = {
       colDistributor: '经销商', colMoq: '最小起订量', colPkg: '包装', colAvailability: '库存情况',
       colRohs: 'RoHS', colOrderPricing: '订购价格', colTotal: '总价 @ {n}', colBuy: '购买',
       inStock: '库存 {n}', outOfStock: '无货', minNotMet: '未达起订量', buy: '购买', no: '否',
+    },
+    mo: {
+      intro: '导入 Odoo 制造单导出文件。每个制造单将合并为一行，显示其当前状态 — 即所有工单中优先级最高的状态（进行中 → 就绪 → 等待物料 → 等待其他工单 → 已完成）。',
+      import: '导入 Excel', importing: '处理中…', importAnother: '导入其他文件',
+      download: '下载整理后的 Excel', summary: '{lines} 条工单记录 → {mos} 个制造单',
+      unknown: '无法识别的状态（按最低优先级处理）：{list}', noStatus: '无状态',
+      failed: '无法处理该文件。', empty: '尚未导入文件。',
     },
     related: {
       tabSimilar: '相似产品', tabAlternatives: '替代产品',

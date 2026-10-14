@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Boxes,
   Search,
+  ClipboardList,
 } from 'lucide-react'
 
 // Sidebar is a tree: top-level menus > optional sub-groups > leaf items (`to`).
@@ -25,7 +26,10 @@ export const NAV_TREE = [
   {
     label: 'PM',
     company: 'PM',
-    children: [{ label: 'RFQ Dashboard', labelKey: 'nav.rfqDashboard', to: '/pm/rfq-dashboard', icon: FileText }],
+    children: [
+      { label: 'RFQ Dashboard', labelKey: 'nav.rfqDashboard', to: '/pm/rfq-dashboard', icon: FileText },
+      { label: 'MO Status', labelKey: 'nav.moStatus', to: '/pm/mo-status', icon: ClipboardList },
+    ],
   },
   { label: 'PKS', company: 'PKS' },
   {
