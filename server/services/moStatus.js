@@ -75,9 +75,12 @@ export function summarizeMoStatus(buffer) {
 
   if (!mos.length) throw httpError('No Manufacturing Orders found — the "Reference" column is empty on every row.')
 
-  // Work Order columns come from the Work Order holding the winning status (shows where
-  // the MO is stuck); every other column comes from the MO's header row.
-  const woCols = new Set([col.workOrder, col.workCenter, col.status].filter(i => i !== -1))
+  // Output = the MO data columns exactly as on the MO's header row (A–N in the current
+  // layout) + the status column holding the winning status (Q). The per-line Work Order
+  // and Work Center columns (O, P) are dropped — after collapsing they describe one line,
+  // not the MO.
+  const dropped = new Set([col.workOrder, col.workCenter].filter(i => i !== -1))
+  const keep = header.map((_, i) => i).filter(i => !dropped.has(i))
   const unknown = new Set()
   const counts = {}
   const cellRows = mos.map(({ cells, best }) => {
@@ -85,14 +88,14 @@ export function summarizeMoStatus(buffer) {
     if (status && rank(status) === PRIORITY.length) unknown.add(status)
     const key = status || 'No status'
     counts[key] = (counts[key] || 0) + 1
-    return cells.map((cell, i) => (woCols.has(i) ? (best || cells)[i] : cell))
+    return keep.map(i => (i === col.status ? (best || cells)[i] : cells[i]))
   })
 
   return {
-    header,
+    header: keep.map(i => header[i]),
     rows: cellRows.map(row => row.map(text)), // display strings for the UI
     cellRows, // original cell objects (types + number formats) for the download
-    statusCol: col.status,
+    statusCol: keep.indexOf(col.status),
     counts,
     unknownStatuses: [...unknown],
     workOrderLines: lines,
