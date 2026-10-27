@@ -14,8 +14,8 @@ router.use(requireAuth, requireCompany('PM'))
 router.post('/process', importUpload.single('file'), (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file received' })
-    const result = summarizeMoStatus(req.file.buffer)
-    const file = buildMoWorkbook(result.header, result.rows)
+    const { cellRows, ...result } = summarizeMoStatus(req.file.buffer)
+    const file = buildMoWorkbook(result.header, cellRows)
     res.json({
       ...result,
       filename: `${path.parse(req.file.originalname).name}-mo-status.xlsx`,

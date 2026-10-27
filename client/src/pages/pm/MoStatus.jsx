@@ -50,7 +50,7 @@ export default function MoStatus() {
     }
   }
 
-  const statusCol = result ? result.header.length - 1 : 0
+  const statusCol = result ? result.statusCol : -1
 
   return (
     <div className="space-y-5">
