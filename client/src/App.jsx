@@ -55,7 +55,9 @@ export default function App() {
           <Route element={<CompanyRoute company="PM" />}>
             <Route path="/pm/rfq-dashboard" element={<RfqDashboard />} />
             <Route path="/pm/mo-status" element={<MoStatus />} />
-            <Route path="/pm/mo-status/dashboard" element={<MoStatusDashboard />} />
+            <Route element={<AdminRoute />}>
+              <Route path="/pm/mo-status/dashboard" element={<MoStatusDashboard />} />
+            </Route>
           </Route>
           <Route path="/source-raw-materials/dashboard" element={<SourceRawMaterialsDashboard />} />
           <Route path="/source-raw-materials/search" element={<SourceRawMaterialsSearch />} />

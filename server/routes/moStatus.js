@@ -2,6 +2,7 @@ import { Router } from 'express'
 import path from 'path'
 import { requireAuth } from '../middleware/auth.js'
 import { requireCompany } from '../middleware/companyOnly.js'
+import { requireAdmin } from '../middleware/adminOnly.js'
 import { importUpload } from '../middleware/upload.js'
 import { summarizeMoStatus, buildMoWorkbook } from '../services/moStatus.js'
 import { logMoImport, getMoStats } from '../services/moStatusAnalytics.js'
@@ -31,8 +32,8 @@ router.post('/process', importUpload.single('file'), async (req, res, next) => {
   }
 })
 
-// GET /api/mo-status/stats — usage analytics for the MO Status dashboard
-router.get('/stats', async (req, res, next) => {
+// GET /api/mo-status/stats — usage analytics for the MO Status dashboard (admins only)
+router.get('/stats', requireAdmin, async (req, res, next) => {
   try {
     res.json(await getMoStats())
   } catch (err) {
