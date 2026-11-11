@@ -26,6 +26,7 @@ model User {
 
   conversionLogs ConversionLog[]
   searchLogs     SearchLog[]
+  moStatusLogs   MoStatusLog[]
 }
 
 model Customer {
@@ -154,4 +155,19 @@ model AlternativesCache {
   refreshedAt DateTime @default(now())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// One row per MO Status import attempt (success or failure) — feeds the MO Status dashboard.
+model MoStatusLog {
+  id             String   @id @default(cuid())
+  userId         String?
+  username       String
+  filename       String
+  workOrderLines Int      @default(0)
+  moCount        Int      @default(0)
+  success        Boolean  @default(true)
+  error          String?
+  createdAt      DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }

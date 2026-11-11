@@ -12,12 +12,12 @@ export const translations = {
     nav: {
       common: 'Common', settings: 'Settings', admin: 'Admin', bomConverter: 'BOM Converter',
       dashboard: 'Dashboard', convert: 'BOM Converter', sourceRawMaterials: 'Source Raw Materials',
-      searchLeaf: 'Search', rfqDashboard: 'RFQ Dashboard', moStatus: 'MO Status', customers: 'Customers',
+      searchLeaf: 'Search', rfqDashboard: 'RFQ Dashboard', moStatus: 'MO Status', importLeaf: 'Import', customers: 'Customers',
       unitOfMeasure: 'Unit of Measure', manufacturers: 'Manufacturers', productRegistry: 'Product Registry',
       users: 'Users', advanced: 'Advanced',
     },
     pageTitles: {
-      '/dashboard': 'Dashboard', '/convert': 'Convert BOM', '/pm/rfq-dashboard': 'RFQ Dashboard', '/pm/mo-status': 'MO Status',
+      '/dashboard': 'Dashboard', '/convert': 'Convert BOM', '/pm/rfq-dashboard': 'RFQ Dashboard', '/pm/mo-status': 'MO Status', '/pm/mo-status/dashboard': 'MO Status Dashboard',
       '/source-raw-materials/dashboard': 'Source Raw Materials Dashboard',
       '/source-raw-materials/search': 'Search Raw Materials', '/settings/users': 'Users',
       '/settings/customers': 'Customers', '/settings/unit-of-measure': 'Unit of Measure',
@@ -100,6 +100,15 @@ export const translations = {
       noStockistsBody: 'The web search returned no independent stockist listings for this part. Try a different part number, or check the Distributors tab.',
       viewListing: 'View listing',
     },
+    moDash: {
+      importsToday: 'Imports Today', usersToday: 'Active Users Today', totalImports: 'Total Imports',
+      totalUsers: 'Users (All Time)', mosProcessed: 'MOs Processed', failed: 'Failed Imports',
+      byUser: 'Usage by User', recentImports: 'Recent Imports', linesProcessed: '{n} work-order lines processed',
+      colUser: 'User', colImports: 'Imports', colMos: 'MOs Processed', colLastUsed: 'Last Used',
+      colFile: 'File', colTime: 'Date / Time', colResult: 'Lines → MOs', colStatus: 'Status',
+      result: '{lines} → {mos}', success: 'Success', failedOne: 'Failed',
+      noImports: 'No imports yet — use MO Status → Import to process a file.',
+    },
     srmDash: {
       searchesToday: 'Searches Today', usersToday: 'Active Users Today', totalSearches: 'Total Searches',
       uniqueParts: 'Unique Parts', resultsShown: 'Results Shown', cachedParts: 'Parts Cached',
@@ -136,12 +145,12 @@ export const translations = {
     nav: {
       common: '通用', settings: '设置', admin: '管理员', bomConverter: 'BOM 转换器',
       dashboard: '仪表盘', convert: 'BOM 转换器', sourceRawMaterials: '原材料采购',
-      searchLeaf: '搜索', rfqDashboard: 'RFQ 仪表盘', moStatus: '制造单状态', customers: '客户',
+      searchLeaf: '搜索', rfqDashboard: 'RFQ 仪表盘', moStatus: '制造单状态', importLeaf: '导入', customers: '客户',
       unitOfMeasure: '计量单位', manufacturers: '制造商', productRegistry: '产品登记',
       users: '用户', advanced: '高级',
     },
     pageTitles: {
-      '/dashboard': '仪表盘', '/convert': 'BOM 转换', '/pm/rfq-dashboard': 'RFQ 仪表盘', '/pm/mo-status': '制造单状态',
+      '/dashboard': '仪表盘', '/convert': 'BOM 转换', '/pm/rfq-dashboard': 'RFQ 仪表盘', '/pm/mo-status': '制造单状态', '/pm/mo-status/dashboard': '制造单状态仪表盘',
       '/source-raw-materials/dashboard': '原材料采购仪表盘',
       '/source-raw-materials/search': '原材料搜索', '/settings/users': '用户',
       '/settings/customers': '客户', '/settings/unit-of-measure': '计量单位',
@@ -223,6 +232,15 @@ export const translations = {
       noStockistsTitle: '未找到独立备货商',
       noStockistsBody: '网络搜索未返回该零件的独立备货商信息。请尝试其他零件号，或查看“经销商”标签页。',
       viewListing: '查看商品',
+    },
+    moDash: {
+      importsToday: '今日导入', usersToday: '今日活跃用户', totalImports: '导入总数',
+      totalUsers: '用户数（累计）', mosProcessed: '已处理制造单', failed: '导入失败',
+      byUser: '按用户统计', recentImports: '最近导入', linesProcessed: '已处理 {n} 条工单记录',
+      colUser: '用户', colImports: '导入次数', colMos: '已处理制造单', colLastUsed: '最近使用',
+      colFile: '文件', colTime: '日期 / 时间', colResult: '记录 → 制造单', colStatus: '状态',
+      result: '{lines} → {mos}', success: '成功', failedOne: '失败',
+      noImports: '暂无导入记录 — 请在“制造单状态 → 导入”中处理文件。',
     },
     srmDash: {
       searchesToday: '今日搜索', usersToday: '今日活跃用户', totalSearches: '搜索总数',

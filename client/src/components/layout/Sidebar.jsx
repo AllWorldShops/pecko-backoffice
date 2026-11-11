@@ -35,6 +35,7 @@ function NavNode({ node, depth, pathname, expanded, toggle }) {
     return (
       <NavLink
         to={node.to}
+        end
         title={label}
         className={({ isActive }) => cn(navItemBase, isActive ? activeClass : inactiveClass)}
         style={{ paddingLeft: `${12 + depth * 16}px` }}

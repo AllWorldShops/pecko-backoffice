@@ -28,7 +28,13 @@ export const NAV_TREE = [
     company: 'PM',
     children: [
       { label: 'RFQ Dashboard', labelKey: 'nav.rfqDashboard', to: '/pm/rfq-dashboard', icon: FileText },
-      { label: 'MO Status', labelKey: 'nav.moStatus', to: '/pm/mo-status', icon: ClipboardList },
+      {
+        label: 'MO Status', labelKey: 'nav.moStatus',
+        children: [
+          { label: 'Dashboard', labelKey: 'nav.dashboard', to: '/pm/mo-status/dashboard', icon: LayoutDashboard },
+          { label: 'Import', labelKey: 'nav.importLeaf', to: '/pm/mo-status', icon: ClipboardList },
+        ],
+      },
     ],
   },
   { label: 'PKS', company: 'PKS' },

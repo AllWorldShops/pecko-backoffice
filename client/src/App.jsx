@@ -17,6 +17,7 @@ import Advanced from '@/pages/settings/Advanced'
 import ProductRegistry from '@/pages/settings/ProductRegistry'
 import RfqDashboard from '@/pages/pm/RfqDashboard'
 import MoStatus from '@/pages/pm/MoStatus'
+import MoStatusDashboard from '@/pages/pm/MoStatusDashboard'
 import SourceRawMaterialsDashboard from '@/pages/source-raw-materials/Dashboard'
 import SourceRawMaterialsSearch from '@/pages/source-raw-materials/Search'
 import api from '@/lib/api'
@@ -54,6 +55,7 @@ export default function App() {
           <Route element={<CompanyRoute company="PM" />}>
             <Route path="/pm/rfq-dashboard" element={<RfqDashboard />} />
             <Route path="/pm/mo-status" element={<MoStatus />} />
+            <Route path="/pm/mo-status/dashboard" element={<MoStatusDashboard />} />
           </Route>
           <Route path="/source-raw-materials/dashboard" element={<SourceRawMaterialsDashboard />} />
           <Route path="/source-raw-materials/search" element={<SourceRawMaterialsSearch />} />
