@@ -50,7 +50,7 @@ export default function GrValue() {
   const [error, setError] = useState('')
   const [result, setResult] = useState(null)
 
-  async function run(rec = receipts, po = poLines, rateText = rates) {
+  async function run(rec = receipts, po = poLines, rateText = rates, recalc = false) {
     if (!rec || !po) return
     setLoading(true)
     setError('')
@@ -60,6 +60,7 @@ export default function GrValue() {
       form.append('poLines', po)
       const numeric = Object.fromEntries(Object.entries(rateText).map(([c, v]) => [c, Number(v)]).filter(([, v]) => v > 0))
       form.append('rates', JSON.stringify(numeric))
+      if (recalc) form.append('recalc', '1') // rate change only — not logged as a new report
       const { data } = await api.post('/gr-value/process', form)
       setResult(data)
     } catch (err) {
@@ -112,7 +113,7 @@ export default function GrValue() {
               {foreign.length === 0 ? (
                 <p className="text-sm text-slate-400">{t('gr.noRatesNeeded', { cur: REPORT_CURRENCY })}</p>
               ) : (
-                <form className="flex flex-wrap items-end gap-4" onSubmit={e => { e.preventDefault(); run() }}>
+                <form className="flex flex-wrap items-end gap-4" onSubmit={e => { e.preventDefault(); run(receipts, poLines, rates, true) }}>
                   {foreign.map(cur => (
                     <label key={cur} className="text-sm text-slate-300">
                       <span className="block text-xs text-slate-500 mb-1">1 {REPORT_CURRENCY} =</span>

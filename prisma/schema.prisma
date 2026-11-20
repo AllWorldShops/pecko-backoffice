@@ -27,6 +27,7 @@ model User {
   conversionLogs ConversionLog[]
   searchLogs     SearchLog[]
   moStatusLogs   MoStatusLog[]
+  grValueLogs    GrValueLog[]
 }
 
 model Customer {
@@ -168,6 +169,24 @@ model MoStatusLog {
   success        Boolean  @default(true)
   error          String?
   createdAt      DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+// One row per GR Value Report run (file upload/change). Rate-only recalculations
+// re-post the same files and are not logged, so counts reflect real reports.
+model GrValueLog {
+  id           String   @id @default(cuid())
+  userId       String?
+  username     String
+  receiptsFile String
+  poLinesFile  String
+  lines        Int      @default(0)
+  priced       Int      @default(0)
+  totalUsd     Float    @default(0)
+  success      Boolean  @default(true)
+  error        String?
+  createdAt    DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }

@@ -12,12 +12,12 @@ export const translations = {
     nav: {
       common: 'Common', settings: 'Settings', admin: 'Admin', bomConverter: 'BOM Converter',
       dashboard: 'Dashboard', convert: 'BOM Converter', sourceRawMaterials: 'Source Raw Materials',
-      searchLeaf: 'Search', rfqDashboard: 'RFQ Dashboard', moStatus: 'MO Status', importLeaf: 'Import', grValue: 'GR Value Report', customers: 'Customers',
+      searchLeaf: 'Search', rfqDashboard: 'RFQ Dashboard', moStatus: 'MO Status', importLeaf: 'Import', reportLeaf: 'Report', grValue: 'GR Value Report', customers: 'Customers',
       unitOfMeasure: 'Unit of Measure', manufacturers: 'Manufacturers', productRegistry: 'Product Registry',
       users: 'Users', advanced: 'Advanced',
     },
     pageTitles: {
-      '/dashboard': 'Dashboard', '/convert': 'Convert BOM', '/pm/rfq-dashboard': 'RFQ Dashboard', '/pm/mo-status': 'MO Status', '/pm/mo-status/dashboard': 'MO Status Dashboard', '/pm/gr-value': 'GR Value Report',
+      '/dashboard': 'Dashboard', '/convert': 'Convert BOM', '/pm/rfq-dashboard': 'RFQ Dashboard', '/pm/mo-status': 'MO Status', '/pm/mo-status/dashboard': 'MO Status Dashboard', '/pm/gr-value': 'GR Value Report', '/pm/gr-value/dashboard': 'GR Value Dashboard',
       '/source-raw-materials/dashboard': 'Source Raw Materials Dashboard',
       '/source-raw-materials/search': 'Search Raw Materials', '/settings/users': 'Users',
       '/settings/customers': 'Customers', '/settings/unit-of-measure': 'Unit of Measure',
@@ -109,6 +109,15 @@ export const translations = {
       result: '{lines} → {mos}', success: 'Success', failedOne: 'Failed',
       noImports: 'No imports yet — use MO Status → Import to process a file.',
     },
+    grDash: {
+      reportsToday: 'Reports Today', usersToday: 'Active Users Today', totalReports: 'Total Reports',
+      totalUsers: 'Users (All Time)', linesPriced: 'Lines Priced', failed: 'Failed Reports',
+      byUser: 'Usage by User', recentReports: 'Recent Reports', linesProcessed: '{n} receipt lines processed',
+      colUser: 'User', colReports: 'Reports', colLines: 'Receipt Lines', colLastUsed: 'Last Used',
+      colFiles: 'Receipts / PO Lines File', colTime: 'Date / Time', colPriced: 'Priced', colTotal: 'Total (USD)', colStatus: 'Status',
+      priced: '{priced} / {lines}', success: 'Success', failedOne: 'Failed',
+      noReports: 'No reports yet — use GR Value Report → Report to run one.',
+    },
     gr: {
       intro: 'Upload the Odoo Receipts export and the Purchase Order Lines export. Each received item is matched to its PO line (PO number + Pecko part number) and valued at the PO unit price, converted to USD with the exchange rates you enter.',
       step1: 'Step 1', step2: 'Step 2', receipts: 'Receipts file', poLines: 'PO lines file',
@@ -159,12 +168,12 @@ export const translations = {
     nav: {
       common: '通用', settings: '设置', admin: '管理员', bomConverter: 'BOM 转换器',
       dashboard: '仪表盘', convert: 'BOM 转换器', sourceRawMaterials: '原材料采购',
-      searchLeaf: '搜索', rfqDashboard: 'RFQ 仪表盘', moStatus: '制造单状态', importLeaf: '导入', grValue: '收货价值报告', customers: '客户',
+      searchLeaf: '搜索', rfqDashboard: 'RFQ 仪表盘', moStatus: '制造单状态', importLeaf: '导入', reportLeaf: '报告', grValue: '收货价值报告', customers: '客户',
       unitOfMeasure: '计量单位', manufacturers: '制造商', productRegistry: '产品登记',
       users: '用户', advanced: '高级',
     },
     pageTitles: {
-      '/dashboard': '仪表盘', '/convert': 'BOM 转换', '/pm/rfq-dashboard': 'RFQ 仪表盘', '/pm/mo-status': '制造单状态', '/pm/mo-status/dashboard': '制造单状态仪表盘', '/pm/gr-value': '收货价值报告',
+      '/dashboard': '仪表盘', '/convert': 'BOM 转换', '/pm/rfq-dashboard': 'RFQ 仪表盘', '/pm/mo-status': '制造单状态', '/pm/mo-status/dashboard': '制造单状态仪表盘', '/pm/gr-value': '收货价值报告', '/pm/gr-value/dashboard': '收货价值报告仪表盘',
       '/source-raw-materials/dashboard': '原材料采购仪表盘',
       '/source-raw-materials/search': '原材料搜索', '/settings/users': '用户',
       '/settings/customers': '客户', '/settings/unit-of-measure': '计量单位',
@@ -255,6 +264,15 @@ export const translations = {
       colFile: '文件', colTime: '日期 / 时间', colResult: '记录 → 制造单', colStatus: '状态',
       result: '{lines} → {mos}', success: '成功', failedOne: '失败',
       noImports: '暂无导入记录 — 请在“制造单状态 → 导入”中处理文件。',
+    },
+    grDash: {
+      reportsToday: '今日报告', usersToday: '今日活跃用户', totalReports: '报告总数',
+      totalUsers: '用户数（累计）', linesPriced: '已计价记录', failed: '失败报告',
+      byUser: '按用户统计', recentReports: '最近报告', linesProcessed: '已处理 {n} 条收货记录',
+      colUser: '用户', colReports: '报告次数', colLines: '收货记录', colLastUsed: '最近使用',
+      colFiles: '收货单 / 采购明细文件', colTime: '日期 / 时间', colPriced: '已计价', colTotal: '总额（USD）', colStatus: '状态',
+      priced: '{priced} / {lines}', success: '成功', failedOne: '失败',
+      noReports: '暂无报告 — 请在“收货价值报告 → 报告”中运行。',
     },
     gr: {
       intro: '上传 Odoo 收货单导出文件和采购订单明细导出文件。每个收货项目将按采购单号 + Pecko 料号匹配到对应的采购明细，按采购单价计价，并按您输入的汇率换算为美元。',

@@ -36,7 +36,13 @@ export const NAV_TREE = [
           { label: 'Import', labelKey: 'nav.importLeaf', to: '/pm/mo-status', icon: ClipboardList },
         ],
       },
-      { label: 'GR Value Report', labelKey: 'nav.grValue', to: '/pm/gr-value', icon: Receipt },
+      {
+        label: 'GR Value Report', labelKey: 'nav.grValue',
+        children: [
+          { label: 'Dashboard', labelKey: 'nav.dashboard', to: '/pm/gr-value/dashboard', icon: LayoutDashboard, adminOnly: true },
+          { label: 'Report', labelKey: 'nav.reportLeaf', to: '/pm/gr-value', icon: Receipt },
+        ],
+      },
     ],
   },
   { label: 'PKS', company: 'PKS' },
