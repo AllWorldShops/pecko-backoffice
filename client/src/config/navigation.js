@@ -13,6 +13,7 @@ import {
   Boxes,
   Search,
   ClipboardList,
+  Receipt,
 } from 'lucide-react'
 
 // Sidebar is a tree: top-level menus > optional sub-groups > leaf items (`to`).
@@ -35,6 +36,7 @@ export const NAV_TREE = [
           { label: 'Import', labelKey: 'nav.importLeaf', to: '/pm/mo-status', icon: ClipboardList },
         ],
       },
+      { label: 'GR Value Report', labelKey: 'nav.grValue', to: '/pm/gr-value', icon: Receipt },
     ],
   },
   { label: 'PKS', company: 'PKS' },

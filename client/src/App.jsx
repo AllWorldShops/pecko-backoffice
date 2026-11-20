@@ -18,6 +18,7 @@ import ProductRegistry from '@/pages/settings/ProductRegistry'
 import RfqDashboard from '@/pages/pm/RfqDashboard'
 import MoStatus from '@/pages/pm/MoStatus'
 import MoStatusDashboard from '@/pages/pm/MoStatusDashboard'
+import GrValue from '@/pages/pm/GrValue'
 import SourceRawMaterialsDashboard from '@/pages/source-raw-materials/Dashboard'
 import SourceRawMaterialsSearch from '@/pages/source-raw-materials/Search'
 import api from '@/lib/api'
@@ -55,6 +56,7 @@ export default function App() {
           <Route element={<CompanyRoute company="PM" />}>
             <Route path="/pm/rfq-dashboard" element={<RfqDashboard />} />
             <Route path="/pm/mo-status" element={<MoStatus />} />
+            <Route path="/pm/gr-value" element={<GrValue />} />
             <Route element={<AdminRoute />}>
               <Route path="/pm/mo-status/dashboard" element={<MoStatusDashboard />} />
             </Route>
