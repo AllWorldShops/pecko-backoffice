@@ -28,6 +28,7 @@ model User {
   searchLogs     SearchLog[]
   moStatusLogs   MoStatusLog[]
   grValueLogs    GrValueLog[]
+  shortageLogs   MaterialShortageLog[]
 }
 
 model Customer {
@@ -184,6 +185,24 @@ model GrValueLog {
   lines        Int      @default(0)
   priced       Int      @default(0)
   totalUsd     Float    @default(0)
+  success      Boolean  @default(true)
+  error        String?
+  createdAt    DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+// One row per Material Shortage report run (Excel downloads re-post the files and are not logged).
+model MaterialShortageLog {
+  id           String   @id @default(cuid())
+  userId       String?
+  username     String
+  moFile       String
+  transferFile String
+  moCount      Int      @default(0)
+  lineCount    Int      @default(0)
+  shortMos     Int      @default(0)
+  shortLines   Int      @default(0)
   success      Boolean  @default(true)
   error        String?
   createdAt    DateTime @default(now())

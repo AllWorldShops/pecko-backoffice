@@ -20,6 +20,8 @@ import MoStatus from '@/pages/pm/MoStatus'
 import MoStatusDashboard from '@/pages/pm/MoStatusDashboard'
 import GrValue from '@/pages/pm/GrValue'
 import GrValueDashboard from '@/pages/pm/GrValueDashboard'
+import MaterialShortage from '@/pages/pm/MaterialShortage'
+import MaterialShortageDashboard from '@/pages/pm/MaterialShortageDashboard'
 import SourceRawMaterialsDashboard from '@/pages/source-raw-materials/Dashboard'
 import SourceRawMaterialsSearch from '@/pages/source-raw-materials/Search'
 import api from '@/lib/api'
@@ -58,9 +60,11 @@ export default function App() {
             <Route path="/pm/rfq-dashboard" element={<RfqDashboard />} />
             <Route path="/pm/mo-status" element={<MoStatus />} />
             <Route path="/pm/gr-value" element={<GrValue />} />
+            <Route path="/pm/material-shortage" element={<MaterialShortage />} />
             <Route element={<AdminRoute />}>
               <Route path="/pm/mo-status/dashboard" element={<MoStatusDashboard />} />
               <Route path="/pm/gr-value/dashboard" element={<GrValueDashboard />} />
+              <Route path="/pm/material-shortage/dashboard" element={<MaterialShortageDashboard />} />
             </Route>
           </Route>
           <Route path="/source-raw-materials/dashboard" element={<SourceRawMaterialsDashboard />} />

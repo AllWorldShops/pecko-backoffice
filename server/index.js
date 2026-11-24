@@ -23,6 +23,7 @@ import rfqRouter from './routes/rfq.js'
 import partSourcingRouter from './routes/partSourcing.js'
 import moStatusRouter from './routes/moStatus.js'
 import grValueRouter from './routes/grValue.js'
+import materialShortageRouter from './routes/materialShortage.js'
 import { startRfqScheduler } from './services/rfqGraphSync.js'
 
 const app = express()
@@ -50,6 +51,7 @@ app.use('/api/rfq', rfqRouter)
 app.use('/api/part-sourcing', partSourcingRouter)
 app.use('/api/mo-status', moStatusRouter)
 app.use('/api/gr-value', grValueRouter)
+app.use('/api/material-shortage', materialShortageRouter)
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
 

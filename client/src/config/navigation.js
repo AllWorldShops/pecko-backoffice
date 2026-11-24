@@ -14,6 +14,7 @@ import {
   Search,
   ClipboardList,
   Receipt,
+  PackageX,
 } from 'lucide-react'
 
 // Sidebar is a tree: top-level menus > optional sub-groups > leaf items (`to`).
@@ -41,6 +42,13 @@ export const NAV_TREE = [
         children: [
           { label: 'Dashboard', labelKey: 'nav.dashboard', to: '/pm/gr-value/dashboard', icon: LayoutDashboard, adminOnly: true },
           { label: 'Report', labelKey: 'nav.reportLeaf', to: '/pm/gr-value', icon: Receipt },
+        ],
+      },
+      {
+        label: 'Material Shortage', labelKey: 'nav.materialShortage',
+        children: [
+          { label: 'Dashboard', labelKey: 'nav.dashboard', to: '/pm/material-shortage/dashboard', icon: LayoutDashboard, adminOnly: true },
+          { label: 'Report', labelKey: 'nav.reportLeaf', to: '/pm/material-shortage', icon: PackageX },
         ],
       },
     ],

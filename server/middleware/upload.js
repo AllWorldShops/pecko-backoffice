@@ -19,18 +19,27 @@ const IMPORT_MIMES = new Set([
   'application/octet-stream', // fallback for some CSV uploads
 ])
 
+function importFileFilter(req, file, cb) {
+  const ext = path.extname(file.originalname).toLowerCase()
+  if (IMPORT_MIMES.has(file.mimetype) || ext === '.csv' || ext === '.xlsx' || ext === '.xls') {
+    cb(null, true)
+  } else {
+    cb(new Error(`Unsupported file type. Upload a .xlsx, .xls, or .csv file.`))
+  }
+}
+
 // In-memory upload for CSV/Excel imports — no disk write needed
 export const importUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB cap for mapping files
-  fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase()
-    if (IMPORT_MIMES.has(file.mimetype) || ext === '.csv' || ext === '.xlsx' || ext === '.xls') {
-      cb(null, true)
-    } else {
-      cb(new Error(`Unsupported file type. Upload a .xlsx, .xls, or .csv file.`))
-    }
-  },
+  fileFilter: importFileFilter,
+})
+
+// Same, for full Odoo exports (e.g. ~100k-row internal transfer report, ~5MB+)
+export const largeImportUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 25 * 1024 * 1024 },
+  fileFilter: importFileFilter,
 })
 
 const uploadDir = process.env.UPLOAD_DIR || './uploads'
